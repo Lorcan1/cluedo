@@ -11,7 +11,7 @@ class GameState():
      # Sqaures that are marked 4 are room squares that are adjacent to room entrances
      # All negative squares are occupied by another user (e.g. -1 is an occupied pathway square
      
-     self.board = np.array([   
+        self.board = np.array([   
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [3, 3, 3, 3, 3, 3, 0, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 0],
         [3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 0],
@@ -40,12 +40,14 @@ class GameState():
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
 
+        self.oldPosition = 1
+
   #  self.playerTurn = 
 
 
 
 gs = GameState()
-print(gs.board)
+# print(gs.board)
 
 #TODO
 #Put players in starting positions and let user move player
