@@ -1,5 +1,5 @@
 import numpy as np
-from player import players,Player
+from player import Player
 
 class GameState():
     def __init__(self):
@@ -23,6 +23,3 @@ class GameState():
 
 gs = GameState()
 gs.enterNumPlayers()
-
-#TODO
-#Put players in starting positions and let user move player

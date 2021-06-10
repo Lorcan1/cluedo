@@ -1,6 +1,7 @@
-from player import Player,players
+from player import Player
 import numpy as np
 import gamesetup
+import random
 
 class Gameplay:
     def __init__(self):
@@ -46,6 +47,43 @@ class Gameplay:
     def startPosition(self,playerDict): #this should probably be in gamesetup
         for player in playerDict.values():
             self.board[player.x][player.y] = -1
+    def rollDice(self,playerDict):# decide who goes first
+        rollList = []
+        for player in playerDict.values():
+            rollCheck = input('Press 1 to roll the dice: \n')
+            if rollCheck == '1':
+                roll = random.randint(1, 6)
+                if roll in rollList:
+                    self.rollDice(playerDict)
+                else:
+                     print(roll)
+                     rollList.append(roll)
+            else:
+                print('Please press 1')
+        startIndex = rollList.index(max(rollList))
+        self.playerMover(startIndex,playerDict)
+    def playerMover(self,turn,playerDict):
+        running = True
+        while running == True:
+            #first player in list is asked if they want to move 
+            playerDictValueList = list(playerDict.values())
+            command = input('Do you wish to move Up, Down. Left or Right: \n')
+            if command in ['Up', 'U','up','u']:
+                self.movePieceUp(playerDictValueList[turn])
+            elif command in ['Down','D','down','d']:
+                self.movePieceDown(playerDictValueList[turn])
+            elif command in ['Left' , 'L' , 'left' , 'l']:
+                self.movePieceLeft(playerDictValueList[turn])
+            elif command in ['Right' , 'R' , 'right' , 'r']:
+                self.movePieceRight(playerDictValueList[turn])
+            else:
+                print('Enter a valid command!')
+            if turn == (len(playerDictValueList)-1):
+                turn = 0
+            else: 
+                turn =+ 1 
+           # running = False
+           # print(self.board)
     def movePieceUp(self,player):
         newX = player.x +1
         newY = player.y
@@ -78,13 +116,12 @@ class Gameplay:
     # 	print(x,y)
 
 gp = Gameplay()
-# player1 = Player('George',0,9)
-# player2 = Player('Billy',0,14)
-# players = [player1,player2]
 gp.startPosition(gamesetup.gs.playersDict)
-
-#gp.movePieceUp(player2)
-# print(gp.board)
+gp.rollDice(gamesetup.gs.playersDict)
 #gp.movePieceUp(gamesetup.gs.playersDict['Ms Scarlett'])
-print('hi')
 print(gp.board)
+
+#TODO
+#Get turns and let users move on their turns 
+#let each user roll a dice, save numbers to a list, sort list and list index is
+#first players turn
