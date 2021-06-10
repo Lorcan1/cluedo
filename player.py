@@ -3,7 +3,7 @@ class Player():
         self.name = name 
         self.x = x
         self.y = y
-        
+
     def updateXY(self,newX,newY):
-    	self.x = newX
-    	self.y = newY
+        self.x = newX
+        self.y = newY

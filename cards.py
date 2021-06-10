@@ -51,12 +51,3 @@ class Cards():
 
 c = Cards()
 c.createCard()
-print(deck['Study'])
-cards = list(deck.keys())
-print(cards)
-temp = cards[12:]
-# print(temp)
-random.shuffle(temp)
-# print(temp)
-cards[12:] = temp
-print(cards)
