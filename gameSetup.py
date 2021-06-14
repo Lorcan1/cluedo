@@ -9,17 +9,23 @@ class GameState():
     def enterNumPlayers(self):
         numPlayers = input('Please enter the number of players: ')
         playerNum = 0
+        playerNamesDict = {'1':'Ms Scarlett', '4':'Rev Green'}
         try:
             while playerNum < int(numPlayers):
-                playerSelection = input('Please Choose Your Player: \n1. Ms Scarlett\n4. Rev Green\n' )
-                if playerSelection == '1':
+                print('Player List:')
+                for i in playerNamesDict :
+                    print(i, playerNamesDict[i])
+                playerSelection = input('Choose Player:\n')
+                if playerSelection == '1' and playerSelection in playerNamesDict.keys():
                   scar = Player('Ms Scarlett',24,7)
                   self.playersDict['Ms Scarlett'] = scar
                   playerNum += 1 
-                elif  playerSelection == '4':
+                  del playerNamesDict['1']
+                elif  playerSelection == '4' and playerSelection in playerNamesDict.keys():
                   green = Player('Rev Green',0,14)
                   self.playersDict['Rev Green'] = green
                   playerNum += 1
+                  del playerNamesDict['4']
                 else:
                   print('Please Select a Valid Character')
                 print('Characters Selected:', ', '.join(self.playersDict)) #can choose the same character

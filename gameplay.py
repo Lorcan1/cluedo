@@ -49,7 +49,7 @@ class Gameplay:
     def rollDice(self,playerDict):# decide who goes first
         rollList = []
         for player in playerDict.values():
-            rollCheck = input('Press 1 to roll the dice: \n')
+            rollCheck = input(f'{player.name} press 1 to roll the dice!: \n')
             if rollCheck == '1':
                 roll = random.randint(1, 6)
                 print(f'{player.name} rolled a:',roll)
@@ -66,9 +66,10 @@ class Gameplay:
         running = True
         playerDictValueList = list(playerDict.values())
         playerDictKeysList = list(playerDict.keys())
-        print(f"{playerDictKeysList[turn]} goes first")
+        print(f"{playerDictKeysList[turn]} rolled higher and therfore {playerDictKeysList[turn]} goes first")
         while running == True:
-            rollCheck = input('Press 1 to roll the dice and move: \n')
+            print(f"{playerDictKeysList[turn]}'s turn")
+            rollCheck = input(f'{playerDictKeysList[turn]} press 1 to roll the dice and move!: \n')
             if rollCheck == '1':
                 self.turnCount = random.randint(1, 6)
                 print('You rolled a:',self.turnCount)
@@ -77,7 +78,7 @@ class Gameplay:
             while 0 < self.turnCount:
                 if playerDictValueList[turn].oldPosition == 2:
                     self.enterRoom(playerDictValueList[turn].x,playerDictValueList[turn].y,playerDictValueList[turn])
-                command = input('Do you wish to move Up, Down. Left or Right: \n')
+                command = input(f'Does {playerDictValueList[turn].name} wish to move Up, Down. Left or Right: \n')
                 if command in ['Up', 'U','up','u']:
                     self.movePieceUp(playerDictValueList[turn])
                 elif command in ['Down','D','down','d']:
@@ -149,5 +150,4 @@ gp.rollDice(gamesetup.gs.playersDict)
 print(gp.board)
 
 #TODO
-#set out of bounds limit
 #move player(token?) to centre of room
