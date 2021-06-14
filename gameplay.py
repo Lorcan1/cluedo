@@ -41,8 +41,7 @@ class Gameplay:
         [3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 3, 3, 3, 3, 3, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
-
-        self.oldPosition = 1
+        self.turnCount = 0
 
     def startPosition(self,playerDict): #this should probably be in gamesetup
         for player in playerDict.values():
@@ -53,6 +52,7 @@ class Gameplay:
             rollCheck = input('Press 1 to roll the dice: \n')
             if rollCheck == '1':
                 roll = random.randint(1, 6)
+                print(f'{player.name} rolled a:',roll)
                 if roll in rollList:
                     self.rollDice(playerDict)
                 else:
@@ -64,20 +64,31 @@ class Gameplay:
         self.playerMover(startIndex,playerDict)
     def playerMover(self,turn,playerDict):
         running = True
+        playerDictValueList = list(playerDict.values())
+        playerDictKeysList = list(playerDict.keys())
+        print(f"{playerDictKeysList[turn]} goes first")
         while running == True:
-            #first player in list is asked if they want to move 
-            playerDictValueList = list(playerDict.values())
-            command = input('Do you wish to move Up, Down. Left or Right: \n')
-            if command in ['Up', 'U','up','u']:
-                self.movePieceUp(playerDictValueList[turn])
-            elif command in ['Down','D','down','d']:
-                self.movePieceDown(playerDictValueList[turn])
-            elif command in ['Left' , 'L' , 'left' , 'l']:
-                self.movePieceLeft(playerDictValueList[turn])
-            elif command in ['Right' , 'R' , 'right' , 'r']:
-                self.movePieceRight(playerDictValueList[turn])
+            rollCheck = input('Press 1 to roll the dice and move: \n')
+            if rollCheck == '1':
+                self.turnCount = random.randint(1, 6)
+                print('You rolled a:',self.turnCount)
             else:
-                print('Enter a valid command!')
+                print('Please press 1')
+            while 0 < self.turnCount:
+                if playerDictValueList[turn].oldPosition == 2:
+                    self.enterRoom(playerDictValueList[turn].x,playerDictValueList[turn].y,playerDictValueList[turn])
+                command = input('Do you wish to move Up, Down. Left or Right: \n')
+                if command in ['Up', 'U','up','u']:
+                    self.movePieceUp(playerDictValueList[turn])
+                elif command in ['Down','D','down','d']:
+                    self.movePieceDown(playerDictValueList[turn])
+                elif command in ['Left' , 'L' , 'left' , 'l']:
+                    self.movePieceLeft(playerDictValueList[turn])
+                elif command in ['Right' , 'R' , 'right' , 'r']:
+                    self.movePieceRight(playerDictValueList[turn])
+                else:
+                    print('Enter a valid command!')
+                self.turnCount -= 1 
             if turn == (len(playerDictValueList)-1):
                 turn = 0
             else: 
@@ -100,33 +111,32 @@ class Gameplay:
         newY = player.y +1
         self.checkValidPosition(player.x,player.y,newX,newY,player)
     def checkValidPosition(self,x,y,newX,newY,player):
-        print(newX)
-        print(25 < newX)
         if ((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or (self.board[newX][newY] == 3 or self.board[newX][newY] == 4) and gamesetup.gs.playerEnterRoom == False:
             print('invalid move')
         else:
             temp = self.board[newX][newY] 
             self.board[newX][newY] = -1
-            self.board[x][y] = self.oldPosition 
-            self.oldPosition = temp   
+            self.board[x][y] = player.oldPosition
+            player.oldPosition = temp   
             print('valid move')
             player.updateXY(newX,newY)
-            if temp == 2: # ask player whether they wish to enter room,gives them an extra turn however 
-                roomBool = input('Do you wish to enter room')
-                if roomBool in ['Yes','Y' ,'yes','y']:
-                    gamesetup.gs.playerEnterRoom = True
-                    directions = [(0,1),(1,0),(-1,0),(0,-1)]
-                    for d in directions:
-                        if self.board[newX + d[0]][newY + d[1]] == 4:
-                            print((newX + d[0]),(newY + d[1]))
-                            self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
-                            accBool = input('DO you wish to make an accusation')
-                            if accBool in ['Yes','Y' ,'yes','y']:
-                                self.makeAccusation()
-
-
-        gamesetup.gs.playerEnterRoom = False
+            if temp == 2 and self.turnCount > 1: # ask player whether they wish to enter room,gives them an extra turn however # and diceroll has at least one left
+                self.enterRoom(newX,newY,player)
         print(self.board)
+    def enterRoom(self,newX,newY,player):
+        roomBool = input('Do you wish to enter room')
+        if roomBool in ['Yes','Y' ,'yes','y']:
+            gamesetup.gs.playerEnterRoom = True
+            directions = [(0,1),(1,0),(-1,0),(0,-1)]
+            for d in directions:
+                if self.board[newX + d[0]][newY + d[1]] == 4:
+                    print((newX + d[0]),(newY + d[1]))
+                    self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
+                    accBool = input('DO you wish to make an accusation')
+                    if accBool in ['Yes','Y' ,'yes','y']:
+                        self.makeAccusation()
+            self.turnCount = 0
+        gamesetup.gs.playerEnterRoom = False
     def makeAccusation(self):
         print('You made an accustaion')
 
