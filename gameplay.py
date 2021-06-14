@@ -83,7 +83,6 @@ class Gameplay:
             else: 
                 turn =+ 1 
            # running = False
-           # print(self.board)
     def movePieceUp(self,player):
         newX = player.x +1
         newY = player.y
@@ -100,9 +99,10 @@ class Gameplay:
         newX = player.x
         newY = player.y +1
         self.checkValidPosition(player.x,player.y,newX,newY,player)
-    # must allow the player to enter another move is the move is invalid
     def checkValidPosition(self,x,y,newX,newY,player):
-        if self.board[newX][newY] != 1:
+        print(newX)
+        print(25 < newX)
+        if ((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or (self.board[newX][newY] == 3 or self.board[newX][newY] == 4) and gamesetup.gs.playerEnterRoom == False:
             print('invalid move')
         else:
             temp = self.board[newX][newY] 
@@ -111,6 +111,24 @@ class Gameplay:
             self.oldPosition = temp   
             print('valid move')
             player.updateXY(newX,newY)
+            if temp == 2: # ask player whether they wish to enter room,gives them an extra turn however 
+                roomBool = input('Do you wish to enter room')
+                if roomBool in ['Yes','Y' ,'yes','y']:
+                    gamesetup.gs.playerEnterRoom = True
+                    directions = [(0,1),(1,0),(-1,0),(0,-1)]
+                    for d in directions:
+                        if self.board[newX + d[0]][newY + d[1]] == 4:
+                            print((newX + d[0]),(newY + d[1]))
+                            self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
+                            accBool = input('DO you wish to make an accusation')
+                            if accBool in ['Yes','Y' ,'yes','y']:
+                                self.makeAccusation()
+
+
+        gamesetup.gs.playerEnterRoom = False
+        print(self.board)
+    def makeAccusation(self):
+        print('You made an accustaion')
 
     # def returnPosisiton(self):
     # 	print(x,y)
@@ -118,10 +136,8 @@ class Gameplay:
 gp = Gameplay()
 gp.startPosition(gamesetup.gs.playersDict)
 gp.rollDice(gamesetup.gs.playersDict)
-#gp.movePieceUp(gamesetup.gs.playersDict['Ms Scarlett'])
 print(gp.board)
 
 #TODO
-#Get turns and let users move on their turns 
-#let each user roll a dice, save numbers to a list, sort list and list index is
-#first players turn
+#set out of bounds limit
+#move player(token?) to centre of room
