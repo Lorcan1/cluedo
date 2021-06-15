@@ -5,6 +5,7 @@ class Player():
         self.y = y
         self.oldPosition = 1
         self.playerCards = []
+        self.room = ()
 
     def updateXY(self,newX,newY):
         self.x = newX

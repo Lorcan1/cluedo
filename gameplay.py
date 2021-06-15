@@ -42,6 +42,7 @@ class Gameplay:
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
         self.turnCount = 0
+        self.movesMade = []
 
     def startPosition(self,playerDict): #this should probably be in gamesetup
         for player in playerDict.values():
@@ -90,6 +91,7 @@ class Gameplay:
                 else:
                     print('Enter a valid command!')
                 self.turnCount -= 1 
+            self.movesMade = []
             if turn == (len(playerDictValueList)-1):
                 turn = 0
             else: 
@@ -112,8 +114,10 @@ class Gameplay:
         newY = player.y +1
         self.checkValidPosition(player.x,player.y,newX,newY,player)
     def checkValidPosition(self,x,y,newX,newY,player):
-        if ((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or (self.board[newX][newY] == 3 or self.board[newX][newY] == 4) and gamesetup.gs.playerEnterRoom == False:
+        self.movesMade.append((x,y))
+        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or (self.board[newX][newY] == 3 or self.board[newX][newY] == 4) or ((newX,newY) in self.movesMade)) and gamesetup.gs.playerEnterRoom == False:
             print('invalid move')
+            self.turnCount += 1
         else:
             temp = self.board[newX][newY] 
             self.board[newX][newY] = -1
@@ -125,7 +129,7 @@ class Gameplay:
                 self.enterRoom(newX,newY,player)
         print(self.board)
     def enterRoom(self,newX,newY,player):
-        roomBool = input('Do you wish to enter room')
+        roomBool = input('Do you wish to enter room: \n')
         if roomBool in ['Yes','Y' ,'yes','y']:
             gamesetup.gs.playerEnterRoom = True
             directions = [(0,1),(1,0),(-1,0),(0,-1)]
@@ -133,16 +137,28 @@ class Gameplay:
                 if self.board[newX + d[0]][newY + d[1]] == 4:
                     print((newX + d[0]),(newY + d[1]))
                     self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
-                    accBool = input('DO you wish to make a suggestion')
+                    accBool = input('Do you wish to make a suggestion: \n')
                     if accBool in ['Yes','Y' ,'yes','y']:
                         self.makeSuggestion()
             self.turnCount = 0
         gamesetup.gs.playerEnterRoom = False
     def makeSuggestion(self):
-        print('You made a suggestion')
+        charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
+        4:'Reverend Green',5:'Colonel Mustard',6:'Dr Orchid'}
+        weapSelectDict = {1:'Candle Stick',2:'Dagger',3:'Lead Pipe',
+        4:'Revolver',5:'Rope',6:'Wrench'}
+        print('Who is the murderer?')
+        for i in charSelectDict:
+            print(str(i)+'.',charSelectDict[i]) 
+        suggestedMurderer = input('Choose from the list: \n')
+        print('What was the murder weapon?: \n')
+        for i in weapSelectDict:
+            print(str(i)+'.',weapSelectDict[i])
+        suggestedWeapon = input('Choose from the list: \n')
         #get current room
         #ask for murderer - move to room
         #ask for weapon - move to room
+
 
     # def returnPosisiton(self):
     # 	print(x,y)
@@ -154,8 +170,6 @@ print(gp.board)
 
 #TODO
 #move player(token?) to centre of room
-#make sure player can't go back over old squares on turn 
-
 
 #Rules
 #you may not move onto a space you already touched this turn
