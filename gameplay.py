@@ -1,7 +1,7 @@
-from player import Player
+import player
 import numpy as np
 import gamesetup
-import random
+import random,rooms
 
 class Gameplay:
     def __init__(self):
@@ -132,6 +132,9 @@ class Gameplay:
         roomBool = input('Do you wish to enter room: \n')
         if roomBool in ['Yes','Y' ,'yes','y']:
             gamesetup.gs.playerEnterRoom = True
+            for room in list(rooms.r.rooms.values()):
+                if (newX,newY) in room.entrances:
+                    player.room = room.name
             directions = [(0,1),(1,0),(-1,0),(0,-1)]
             for d in directions:
                 if self.board[newX + d[0]][newY + d[1]] == 4:
@@ -139,10 +142,10 @@ class Gameplay:
                     self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
                     accBool = input('Do you wish to make a suggestion: \n')
                     if accBool in ['Yes','Y' ,'yes','y']:
-                        self.makeSuggestion()
+                        self.makeSuggestion(player)
             self.turnCount = 0
         gamesetup.gs.playerEnterRoom = False
-    def makeSuggestion(self):
+    def makeSuggestion(self,player):
         charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
         4:'Reverend Green',5:'Colonel Mustard',6:'Dr Orchid'}
         weapSelectDict = {1:'Candle Stick',2:'Dagger',3:'Lead Pipe',
@@ -155,7 +158,7 @@ class Gameplay:
         for i in weapSelectDict:
             print(str(i)+'.',weapSelectDict[i])
         suggestedWeapon = input('Choose from the list: \n')
-        #get current room
+        suggestedRoom = player.room
         #ask for murderer - move to room
         #ask for weapon - move to room
 
@@ -164,12 +167,17 @@ class Gameplay:
     # 	print(x,y)
 
 gp = Gameplay()
-gp.startPosition(gamesetup.gs.playersDict)
+gp.startPosition(player.p.allPlayersDict)
 gp.rollDice(gamesetup.gs.playersDict)
 print(gp.board)
 
 #TODO
 #move player(token?) to centre of room
+#add secret passageway
+#add room name to player
+#REMOVE ROOM ONCE PLAYER HAS LEFT ROOM
+#PUTTING FILE NAMES IN CAPS WOULD BE EASIER TO READ
+#ALL CHARACTERS WILL BE PUT IN STARTING SPACE WHETHER IN GAME OR NOT
 
 #Rules
 #you may not move onto a space you already touched this turn

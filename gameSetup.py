@@ -12,6 +12,7 @@ class GameState():
         numPlayers = input('Please enter the number of players: ')
         playerNum = 0
         playerNamesDict = {'1':'Ms Scarlett', '4':'Rev Green'}
+
         try:
             while playerNum < int(numPlayers):
                 print('Player List:')
@@ -48,7 +49,8 @@ class GameState():
 
         for player in self.playersDict.values():
             print(player.showHand())
-            
+
+
 gs = GameState()
 gs.enterNumPlayers()
 gs.dealCards()

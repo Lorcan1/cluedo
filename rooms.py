@@ -7,6 +7,7 @@ class Kitchen(Room):
         self.name = 'Kitchen'
         self.entrances = [(7,4)]
 
+
 class Ballroom(Room):
     def __init__(self):
         self.name = 'Ballroom'
@@ -46,3 +47,31 @@ class Study(Room):
     def __init__(self):
         self.name = 'Study'
         self.entrances = [(20,17)]
+
+class Rooms():
+    def __init__(self):
+        self.rooms = {}
+
+    def createRoom(self):
+        kitchenRoom = Kitchen()
+        ballroomRoom = Ballroom()
+        conservatoryRoom = Conservatory()
+        diningRoomRoom = DiningRoom()
+        billiardRoomRoom = BilliardRoom()
+        libraryRoom = Library()
+        loungeRoom = Lounge()
+        hallRoom = Hall()
+        studyRoom = Study()
+
+        for room in [kitchenRoom,ballroomRoom,conservatoryRoom,
+                     diningRoomRoom,billiardRoomRoom,libraryRoom,
+                     loungeRoom,hallRoom,studyRoom]:
+            self.rooms[room.name] = room
+ 
+
+
+
+
+r = Rooms()
+r.createRoom()
+print(r.rooms)
