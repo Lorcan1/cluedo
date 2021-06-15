@@ -1,5 +1,7 @@
 import numpy as np
 from player import Player
+import cards
+import random
 
 class GameState():
     def __init__(self):
@@ -32,5 +34,21 @@ class GameState():
         except ValueError:
             print('Please enter an integer')
 
+    def dealCards(self):
+        cardsToDeal = cards.c.cards
+        random.shuffle(cardsToDeal)
+        counter = 0
+        noOfPlayers,playersList = len(list(self.playersDict.values())),list(self.playersDict.values())
+        for card in cardsToDeal:
+          playersList[counter].playerCards.append(card)
+          if counter < (noOfPlayers-1):
+            counter += 1 
+          else:
+            counter = 0
+
+        for player in self.playersDict.values():
+            print(player.showHand())
+            
 gs = GameState()
 gs.enterNumPlayers()
+gs.dealCards()

@@ -69,7 +69,7 @@ class Gameplay:
         print(f"{playerDictKeysList[turn]} rolled higher and therfore {playerDictKeysList[turn]} goes first")
         while running == True:
             print(f"{playerDictKeysList[turn]}'s turn")
-            rollCheck = input(f'{playerDictKeysList[turn]} press 1 to roll the dice and move!: \n')
+            rollCheck = input(f'{playerDictKeysList[turn]} press 1 to roll the dice and move!: \nPress 2 to make an Accusation!: \n')
             if rollCheck == '1':
                 self.turnCount = random.randint(1, 6)
                 print('You rolled a:',self.turnCount)
@@ -133,13 +133,16 @@ class Gameplay:
                 if self.board[newX + d[0]][newY + d[1]] == 4:
                     print((newX + d[0]),(newY + d[1]))
                     self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
-                    accBool = input('DO you wish to make an accusation')
+                    accBool = input('DO you wish to make a suggestion')
                     if accBool in ['Yes','Y' ,'yes','y']:
-                        self.makeAccusation()
+                        self.makeSuggestion()
             self.turnCount = 0
         gamesetup.gs.playerEnterRoom = False
-    def makeAccusation(self):
-        print('You made an accustaion')
+    def makeSuggestion(self):
+        print('You made a suggestion')
+        #get current room
+        #ask for murderer - move to room
+        #ask for weapon - move to room
 
     # def returnPosisiton(self):
     # 	print(x,y)
@@ -151,3 +154,12 @@ print(gp.board)
 
 #TODO
 #move player(token?) to centre of room
+#make sure player can't go back over old squares on turn 
+
+
+#Rules
+#you may not move onto a space you already touched this turn
+#You must be in the room that you mention in your suggestion
+#if player has more than one suggestion card, they only show you one
+#once player sees one card. turn is over
+#if you make an an accusation and are wrong you loose

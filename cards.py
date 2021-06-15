@@ -11,24 +11,37 @@ class Card():
 
 
 class Cards():
-    def envelope(self):
-        cards = list(deck.keys())
-        temp = cards[:6]
-        random.shuffle(temp)
-        cards[:6] = temp
+    def __init__(self):
+        self.cards = []
 
-        temp = cards[6:12]
+    def makeEnvelope(self):
+        self.cards = list(deck.keys())
+        temp = self.cards[:6]
         random.shuffle(temp)
-        cards[6:12] = temp
+        self.cards[:6] = temp
+        murderer = self.cards[:6].pop()
+        self.cards.remove(murderer)
 
-        temp = cards[12:]
+        temp = self.cards[5:11]
         random.shuffle(temp)
-        cards[12:] = tem0p
+        self.cards[5:11] = temp
+        murderWeapon = self.cards[5:11].pop()
+        self.cards.remove(murderWeapon)
+
+        temp = self.cards[12:]
+        random.shuffle(temp)
+        self.cards[12:] = temp
+        murderRoom = self.cards[12:].pop()
+        self.cards.remove(murderRoom)
+
+        env = Envelope()
+        env.envelope.extend([murderer,murderWeapon,murderRoom])
+        print(env)
 
     def createCard(self):
         scarlett = Card('Miss Scarlett')
         green = Card('Rev Green')
-        mustard = Card('Mustard')
+        mustard = Card('Colonel Mustard')
         plum = Card('Professor Plum')
         peacock = Card('Mrs Peacock')
         white = Card('Mrs White')
@@ -48,6 +61,13 @@ class Cards():
         hall = Card('Hall')
         study = Card('Study')
 
+class Envelope():
+    def __init__(self):
+         self.envelope = []
+
+    def __str__(self):
+        return ' '.join(self.envelope)
 
 c = Cards()
 c.createCard()
+c.makeEnvelope()
