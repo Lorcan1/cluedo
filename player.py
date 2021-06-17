@@ -18,8 +18,8 @@ class Players():
     def __init__(self):
         self.allPlayersDict = {}
     def createPlayers(self):
-        scar = Player('Ms Scarlett',24,7)
-        green = Player('Rev Green',0,14)
+        scar = Player('Miss Scarlett',24,7)
+        green = Player('Reverend Green',0,14)
         self.addPlayersDict(scar,self.allPlayersDict)
         self.addPlayersDict(green,self.allPlayersDict)
     def addPlayersDict(self,player,dict):

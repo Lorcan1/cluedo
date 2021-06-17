@@ -97,23 +97,23 @@ class Gameplay:
             else: 
                 turn =+ 1 
            # running = False
-    def movePieceUp(self,player):
-        newX = player.x +1
-        newY = player.y
-        self.checkValidPosition(player.x,player.y,newX,newY,player)
-    def movePieceDown(self,player):
-        newX = player.x -1
-        newY = player.y
-        self.checkValidPosition(player.x,player.y,newX,newY,player)
-    def movePieceLeft(self,player):
-        newX = player.x
-        newY = player.y -1
-        self.checkValidPosition(player.x,player.y,newX,newY,player)
-    def movePieceRight(self,player):
-        newX = player.x
-        newY = player.y +1
-        self.checkValidPosition(player.x,player.y,newX,newY,player)
-    def checkValidPosition(self,x,y,newX,newY,player):
+    def movePieceUp(self,selectedPlayer):
+        newX = selectedPlayer.x +1
+        newY = selectedPlayer.y
+        self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+    def movePieceDown(self,selectedPlayer):
+        newX = selectedPlayer.x -1
+        newY = selectedPlayer.y
+        self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+    def movePieceLeft(self,selectedPlayer):
+        newX = selectedPlayer.x
+        newY = selectedPlayer.y -1
+        self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+    def movePieceRight(self,selectedPlayer):
+        newX = selectedPlayer.x
+        newY = selectedPlayer.y +1
+        self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+    def checkValidPosition(self,x,y,newX,newY,selectedPlayer):
         self.movesMade.append((x,y))
         if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or (self.board[newX][newY] == 3 or self.board[newX][newY] == 4) or ((newX,newY) in self.movesMade)) and gamesetup.gs.playerEnterRoom == False:
             print('invalid move')
@@ -121,31 +121,33 @@ class Gameplay:
         else:
             temp = self.board[newX][newY] 
             self.board[newX][newY] = -1
-            self.board[x][y] = player.oldPosition
-            player.oldPosition = temp   
+            self.board[x][y] = selectedPlayer.oldPosition
+            selectedPlayer.oldPosition = temp   
             print('valid move')
-            player.updateXY(newX,newY)
+            selectedPlayer.updateXY(newX,newY)
             if temp == 2 and self.turnCount > 1: # ask player whether they wish to enter room,gives them an extra turn however # and diceroll has at least one left
-                self.enterRoom(newX,newY,player)
+                self.enterRoom(newX,newY,selectedPlayer)
         print(self.board)
-    def enterRoom(self,newX,newY,player):
+    def enterRoom(self,newX,newY,selectedPlayer):
         roomBool = input('Do you wish to enter room: \n')
         if roomBool in ['Yes','Y' ,'yes','y']:
             gamesetup.gs.playerEnterRoom = True
             for room in list(rooms.r.rooms.values()):
                 if (newX,newY) in room.entrances:
-                    player.room = room.name
+                    selectedPlayer.room = room.name
             directions = [(0,1),(1,0),(-1,0),(0,-1)]
             for d in directions:
                 if self.board[newX + d[0]][newY + d[1]] == 4:
-                    print((newX + d[0]),(newY + d[1]))
-                    self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],player)
-                    accBool = input('Do you wish to make a suggestion: \n')
-                    if accBool in ['Yes','Y' ,'yes','y']:
-                        self.makeSuggestion(player)
+                    print('yarppp')
+                    self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],selectedPlayer)
+                   # self.centrePlayerInRoom(selectedPlayer)
+                    if self.turnCount > 0: #needs to be player.turncount
+                        accBool = input('Do you wish to make a suggestion: \n')
+                        if accBool in ['Yes','Y' ,'yes','y']:
+                            self.makeSuggestion(selectedPlayer)
             self.turnCount = 0
         gamesetup.gs.playerEnterRoom = False
-    def makeSuggestion(self,player):
+    def makeSuggestion(self,selectedPlayer):
         charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
         4:'Reverend Green',5:'Colonel Mustard',6:'Dr Orchid'}
         weapSelectDict = {1:'Candle Stick',2:'Dagger',3:'Lead Pipe',
@@ -158,7 +160,41 @@ class Gameplay:
         for i in weapSelectDict:
             print(str(i)+'.',weapSelectDict[i])
         suggestedWeapon = input('Choose from the list: \n')
-        suggestedRoom = player.room
+        suggestedRoom = selectedPlayer.room
+        suggestedMurderer = player.p.allPlayersDict[charSelectDict[int(suggestedMurderer)]]
+        self.moveSuspect(selectedPlayer,suggestedMurderer)
+    def moveSuspect(self,selectedPlayer,suggestedMurderer):
+        print(selectedPlayer)
+        print(suggestedMurderer)
+        if selectedPlayer.name == suggestedMurderer.name:
+            pass
+        else:
+            suggestedMurderer.room = selectedPlayer.room  #room name
+            self.board[suggestedMurderer.x][suggestedMurderer.y] = suggestedMurderer.oldPosition
+            suggestedMurderer.x, suggestedMurderer.y =  rooms.r.rooms[suggestedMurderer.room].entrances[0][0],rooms.r.rooms[suggestedMurderer.room].entrances[0][1]
+            self.board[suggestedMurderer.x][suggestedMurderer.y] = -1 
+         #   self.checkValidPosition(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
+          #  self.centrePlayerInRoom(suggestedMurderer)
+            self.enterRoom(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
+    # def centrePlayerInRoom(self,selectedPlayer):
+    #     directions = [(0,1),(1,0),(-1,0),(0,-1)]
+    #     for d in directions:
+    #         for i in range(1,5):
+    #             if self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 3:
+    #                # selectedPlayer.x, selectedPlayer.y = selectedPlayer.x + d[0],selectedPlayer.y + d[1]
+    #                 self.board[selectedPlayer.x][selectedPlayer.y] = 4
+    #                 self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] = -1
+    #                 selectedPlayer.x, selectedPlayer.y = selectedPlayer.x + d[0],selectedPlayer.y + d[1]
+    #                 print(selectedPlayer.name,d)
+    #                 break
+    #             elif self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 4:
+    #                 pass
+    #             elif self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == -1:
+    #                 d = d*i
+    #                 print(d)
+
+        
+
         #ask for murderer - move to room
         #ask for weapon - move to room
 
@@ -176,8 +212,7 @@ print(gp.board)
 #add secret passageway
 #add room name to player
 #REMOVE ROOM ONCE PLAYER HAS LEFT ROOM
-#PUTTING FILE NAMES IN CAPS WOULD BE EASIER TO READ
-#ALL CHARACTERS WILL BE PUT IN STARTING SPACE WHETHER IN GAME OR NOT
+
 
 #Rules
 #you may not move onto a space you already touched this turn
@@ -185,3 +220,26 @@ print(gp.board)
 #if player has more than one suggestion card, they only show you one
 #once player sees one card. turn is over
 #if you make an an accusation and are wrong you loose
+
+#Lessons
+#PUTTING FILE NAMES IN CAPS WOULD BE EASIER TO READ
+
+# 2 1
+# 1 1 
+# 2 1
+# 4 1 
+# 3 1
+
+# 21 
+# 11
+# 21
+# -11
+# -11
+# 41
+
+21
+11
+21
+-11
+41
+-11

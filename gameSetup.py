@@ -11,7 +11,7 @@ class GameState():
     def enterNumPlayers(self):
         numPlayers = input('Please enter the number of players: ')
         playerNum = 0
-        playerNamesDict = {'1':'Ms Scarlett', '4':'Rev Green'}
+        playerNamesDict = {'1':'Miss Scarlett', '4':'Reverend Green'}
 
         try:
             while playerNum < int(numPlayers):
@@ -20,13 +20,13 @@ class GameState():
                     print(i, playerNamesDict[i])
                 playerSelection = input('Choose Player:\n')
                 if playerSelection == '1' and playerSelection in playerNamesDict.keys():
-                  scar = Player('Ms Scarlett',24,7)
-                  self.playersDict['Ms Scarlett'] = scar
+                  scar = Player('Miss Scarlett',24,7)
+                  self.playersDict['Miss Scarlett'] = scar
                   playerNum += 1 
                   del playerNamesDict['1']
                 elif  playerSelection == '4' and playerSelection in playerNamesDict.keys():
-                  green = Player('Rev Green',0,14)
-                  self.playersDict['Rev Green'] = green
+                  green = Player('Reverend Green',0,14)
+                  self.playersDict['Reverend Green'] = green
                   playerNum += 1
                   del playerNamesDict['4']
                 else:
