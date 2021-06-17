@@ -6,7 +6,6 @@ import random
 class GameState():
     def __init__(self):
       self.playersDict = {}
-      self.playerEnterRoom = False
 
     def enterNumPlayers(self):
         numPlayers = input('Please enter the number of players: ')
@@ -20,7 +19,7 @@ class GameState():
                     print(i, playerNamesDict[i])
                 playerSelection = input('Choose Player:\n')
                 if playerSelection == '1' and playerSelection in playerNamesDict.keys():
-                  scar = Player('Miss Scarlett',24,7)
+                  scar = Player('Miss Scarlett',18,7)
                   self.playersDict['Miss Scarlett'] = scar
                   playerNum += 1 
                   del playerNamesDict['1']

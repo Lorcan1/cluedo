@@ -77,7 +77,7 @@ class Gameplay:
             else:
                 print('Please press 1')
             while 0 < self.turnCount:
-                if playerDictValueList[turn].oldPosition == 2:
+                if playerDictValueList[turn].oldPosition == 2: #ask if they wanted to enter room if they finised last turn on an entrance
                     self.enterRoom(playerDictValueList[turn].x,playerDictValueList[turn].y,playerDictValueList[turn])
                 command = input(f'Does {playerDictValueList[turn].name} wish to move Up, Down. Left or Right: \n')
                 if command in ['Up', 'U','up','u']:
@@ -115,7 +115,7 @@ class Gameplay:
         self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
     def checkValidPosition(self,x,y,newX,newY,selectedPlayer):
         self.movesMade.append((x,y))
-        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or (self.board[newX][newY] == 3 or self.board[newX][newY] == 4) or ((newX,newY) in self.movesMade)) and gamesetup.gs.playerEnterRoom == False:
+        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or self.board[newX][newY] == 3 or self.board[newX][newY] == 4 or ((newX,newY) in self.movesMade)):
             print('invalid move')
             self.turnCount += 1
         else:
@@ -131,22 +131,28 @@ class Gameplay:
     def enterRoom(self,newX,newY,selectedPlayer):
         roomBool = input('Do you wish to enter room: \n')
         if roomBool in ['Yes','Y' ,'yes','y']:
-            gamesetup.gs.playerEnterRoom = True
             for room in list(rooms.r.rooms.values()):
                 if (newX,newY) in room.entrances:
                     selectedPlayer.room = room.name
-            directions = [(0,1),(1,0),(-1,0),(0,-1)]
-            for d in directions:
-                if self.board[newX + d[0]][newY + d[1]] == 4:
-                    print('yarppp')
-                    self.checkValidPosition(newX,newY,newX + d[0],newY + d[1],selectedPlayer)
-                   # self.centrePlayerInRoom(selectedPlayer)
+                    self.movePlayerIntoRoom(selectedPlayer)
                     if self.turnCount > 0: #needs to be player.turncount
                         accBool = input('Do you wish to make a suggestion: \n')
                         if accBool in ['Yes','Y' ,'yes','y']:
                             self.makeSuggestion(selectedPlayer)
             self.turnCount = 0
-        gamesetup.gs.playerEnterRoom = False
+    def movePlayerIntoRoom(self,selectedPlayer):
+        directions = [(0,1),(1,0),(-1,0),(0,-1)]
+        for d in directions:
+            if self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 4:
+                temp = self.board[selectedPlayer.x][selectedPlayer.y] 
+                self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] = -1
+                self.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
+                selectedPlayer.oldPosition = temp
+                selectedPlayer.x = selectedPlayer.x + d[0]
+                selectedPlayer.y = selectedPlayer.y + d[1]
+                self.centrePlayerInRoom(selectedPlayer)
+                print(self.board)
+
     def makeSuggestion(self,selectedPlayer):
         charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
         4:'Reverend Green',5:'Colonel Mustard',6:'Dr Orchid'}
@@ -176,22 +182,48 @@ class Gameplay:
          #   self.checkValidPosition(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
           #  self.centrePlayerInRoom(suggestedMurderer)
             self.enterRoom(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
-    # def centrePlayerInRoom(self,selectedPlayer):
-    #     directions = [(0,1),(1,0),(-1,0),(0,-1)]
-    #     for d in directions:
-    #         for i in range(1,5):
-    #             if self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 3:
-    #                # selectedPlayer.x, selectedPlayer.y = selectedPlayer.x + d[0],selectedPlayer.y + d[1]
-    #                 self.board[selectedPlayer.x][selectedPlayer.y] = 4
-    #                 self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] = -1
-    #                 selectedPlayer.x, selectedPlayer.y = selectedPlayer.x + d[0],selectedPlayer.y + d[1]
-    #                 print(selectedPlayer.name,d)
-    #                 break
-    #             elif self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 4:
-    #                 pass
-    #             elif self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == -1:
-    #                 d = d*i
-    #                 print(d)
+    def centrePlayerInRoom(self,selectedPlayer):
+        directions = ((0,1),(1,0),(-1,0),(0,-1))
+        playerRow = selectedPlayer.x
+        playerCol = selectedPlayer.y
+        selectedPlayer.oldPosition = 4 #this needs to be changed
+
+        for d in directions:
+            print('xxxxxxxxxx')
+            print(d)
+            print('xxxxxxxxxx')
+            playerRow = selectedPlayer.x
+            playerCol = selectedPlayer.y
+            playerRow = playerRow + (d[0])
+            playerCol = playerCol + (d[1])
+            for i in range(1,5):
+                if self.board[playerRow][playerCol] == 1:
+                    print(playerRow,playerCol)
+                    print('break')
+                    break
+                elif self.board[playerRow][playerCol] == 3:
+                    print('yyyyyyy')
+                    print(playerRow,playerCol)
+                    print('yyyyyyy')
+                    temp = self.board[playerRow][playerCol] 
+                    self.board[playerRow][playerCol] = -1
+                    self.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
+                    print('return')
+                    selectedPlayer.oldPosition = temp
+                    return
+                else:
+                    playerRow = playerRow + (d[0]*i)
+                    playerCol = playerCol + (d[1]*i)
+                    print('zzzzzzzzzzzz')
+                    print(d,i)
+                    print('zzzzzzzzzzzz')
+                    print(self.board[playerRow][playerCol])
+
+                    #kind of working for moving player, but its starting on the 2 
+                    #instead of the 4 and changing it to 1 (because olPosition is one
+                    #but its leaving its orginal position ok so its the second old position)
+
+                    
 
         
 
@@ -223,6 +255,8 @@ print(gp.board)
 
 #Lessons
 #PUTTING FILE NAMES IN CAPS WOULD BE EASIER TO READ
+#COMMENT MORE
+#FIX SUBLIME
 
 # 2 1
 # 1 1 
