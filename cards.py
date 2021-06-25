@@ -37,6 +37,7 @@ class Cards():
         env = Envelope()
         env.envelope.extend([murderer,murderWeapon,murderRoom])
         print(env)
+        return env
 
     def createCard(self):
         scarlett = Card('Miss Scarlett')
@@ -44,7 +45,7 @@ class Cards():
         mustard = Card('Colonel Mustard')
         plum = Card('Professor Plum')
         peacock = Card('Mrs Peacock')
-        white = Card('Mrs White')
+        orchid = Card('Dr Orchid')
         candleStick = Card('Candle Stick')
         dagger = Card('Dagger')
         leadPipe = Card('Lead Pipe')
@@ -70,4 +71,4 @@ class Envelope():
 
 c = Cards()
 c.createCard()
-c.makeEnvelope()
+env = c.makeEnvelope()

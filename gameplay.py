@@ -1,7 +1,7 @@
 import player
 import numpy as np
 import gamesetup
-import random,rooms
+import random,rooms,cards
 
 class Gameplay:
     def __init__(self):
@@ -74,28 +74,38 @@ class Gameplay:
             if rollCheck == '1':
                 self.turnCount = random.randint(1, 6)
                 print('You rolled a:',self.turnCount)
-            else:
-                print('Please press 1')
-            while 0 < self.turnCount:
-                if playerDictValueList[turn].oldPosition == 2: #ask if they wanted to enter room if they finised last turn on an entrance
-                    self.enterRoom(playerDictValueList[turn].x,playerDictValueList[turn].y,playerDictValueList[turn])
-                command = input(f'Does {playerDictValueList[turn].name} wish to move Up, Down. Left or Right: \n')
-                if command in ['Up', 'U','up','u']:
-                    self.movePieceUp(playerDictValueList[turn])
-                elif command in ['Down','D','down','d']:
-                    self.movePieceDown(playerDictValueList[turn])
-                elif command in ['Left' , 'L' , 'left' , 'l']:
-                    self.movePieceLeft(playerDictValueList[turn])
-                elif command in ['Right' , 'R' , 'right' , 'r']:
-                    self.movePieceRight(playerDictValueList[turn])
-                else:
-                    print('Enter a valid command!')
-                self.turnCount -= 1 
-            self.movesMade = []
-            if turn == (len(playerDictValueList)-1):
-                turn = 0
-            else: 
-                turn =+ 1 
+                while 0 < self.turnCount:
+                    if playerDictValueList[turn].oldPosition == 2: #ask if they wanted to enter room if they finised last turn on an entrance
+                        self.enterRoom(playerDictValueList[turn].x,playerDictValueList[turn].y,playerDictValueList[turn])
+                    command = input(f'Does {playerDictValueList[turn].name} wish to move Up, Down. Left or Right: \n')
+                    if command in ['Up', 'U','up','u']:
+                        self.movePieceUp(playerDictValueList[turn])
+                    elif command in ['Down','D','down','d']:
+                        self.movePieceDown(playerDictValueList[turn])
+                    elif command in ['Left' , 'L' , 'left' , 'l']:
+                        self.movePieceLeft(playerDictValueList[turn])
+                    elif command in ['Right' , 'R' , 'right' , 'r']:
+                        self.movePieceRight(playerDictValueList[turn])
+                    else:
+                        print('Enter a valid command!')
+                    self.turnCount -= 1 
+                self.movesMade = []
+                if turn == (len(playerDictValueList)-1):
+                    turn = 0
+                else: 
+                    turn =+ 1 
+            elif rollCheck == '2':
+                accusation = self.makeSuggestion(playerDictValueList[turn],1)
+                counter = 0
+                for i in range(len(accusation)):
+                    if accusation[i] == cards.env.envelope[i]:
+                        counter += 1 
+                if counter == 3: 
+                    print('You win')
+                else: #player must be removed from game 
+                    print('You lose')
+
+
            # running = False
     def movePieceUp(self,selectedPlayer):
         newX = selectedPlayer.x +1
@@ -153,7 +163,7 @@ class Gameplay:
                 self.centrePlayerInRoom(selectedPlayer)
                 print(self.board)
 
-    def makeSuggestion(self,selectedPlayer):
+    def makeSuggestion(self,selectedPlayer,isSuggestion=0):
         charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
         4:'Reverend Green',5:'Colonel Mustard',6:'Dr Orchid'}
         weapSelectDict = {1:'Candle Stick',2:'Dagger',3:'Lead Pipe',
@@ -166,9 +176,24 @@ class Gameplay:
         for i in weapSelectDict:
             print(str(i)+'.',weapSelectDict[i])
         suggestedWeapon = input('Choose from the list: \n')
-        suggestedRoom = selectedPlayer.room
-        suggestedMurderer = player.p.allPlayersDict[charSelectDict[int(suggestedMurderer)]]
-        self.moveSuspect(selectedPlayer,suggestedMurderer)
+        
+#        suggestedMurdererCharacter = player.p.allPlayersDict[charSelectDict[int(suggestedMurderer)]] #needs the player object to be moved as opposed to a string name
+#        self.moveSuspect(selectedPlayer,suggestedMurdererCharacter)
+        suggestedMurderer = charSelectDict[int(suggestedMurderer)]
+        suggestedWeapon = weapSelectDict[int(suggestedWeapon)]
+        if isSuggestion == 1:
+            roomSelectDict = {1:'Kitchen',2:'Ballroom',3:'Conservatory',
+            4:'Dining Room',5:'Billiard Room',6:'Library',7:'Lounge',8:'Hall',9:'Study'}
+            for i in roomSelectDict:
+                print(str(i)+'.',roomSelectDict[i])
+            suggestedRoom = input('Choose from the list: \n')
+            suggestedRoom = roomSelectDict[int(suggestedRoom)]
+            accusation = (suggestedMurderer,suggestedWeapon,suggestedRoom)
+            return accusation
+        else:
+            suggestedRoom = selectedPlayer.room
+            suggestion = (suggestedMurderer,suggestedWeapon,suggestedRoom)
+            self.checkCards(selectedPlayer,suggestion)
     def moveSuspect(self,selectedPlayer,suggestedMurderer):
         print(selectedPlayer)
         print(suggestedMurderer)
@@ -218,10 +243,28 @@ class Gameplay:
                     print(d,i)
                     print('zzzzzzzzzzzz')
                     print(self.board[playerRow][playerCol])
-
-                    #kind of working for moving player, but its starting on the 2 
+                     #kind of working for moving player, but its starting on the 2 
                     #instead of the 4 and changing it to 1 (because olPosition is one
                     #but its leaving its orginal position ok so its the second old position)
+
+   # This function checks the players suggestion against other players cards
+    def checkCards(self,selectedPlayer,suggestion): #NEEDS TO BE TESTED FOR THREE PLAYERS IE DOES IT STOP IF PLAYER HAS A CARD
+        cards = []
+        returnedCard = False
+        for pName in gamesetup.gs.playersDict:
+            if pName != selectedPlayer.name and returnedCard == False: #iterate players apart from player whos turn it is
+                for card in gamesetup.gs.playersDict[pName].playerCards: 
+                    for s in suggestion:
+                        if card == s: 
+                            cards.append(card)
+                            returnedCard = True
+        if len(cards) is not None: #if player has more than one card, display a random one 
+            print(random.choice(cards))
+
+                
+                
+
+                   
 
                     
 
@@ -243,7 +286,7 @@ print(gp.board)
 #move player(token?) to centre of room
 #add secret passageway
 #add room name to player
-#REMOVE ROOM ONCE PLAYER HAS LEFT ROOM
+  #REMOVE ROOM ONCE PLAYER HAS LEFT ROOM
 
 
 #Rules

@@ -40,11 +40,12 @@ class GameState():
         counter = 0
         noOfPlayers,playersList = len(list(self.playersDict.values())),list(self.playersDict.values())
         for card in cardsToDeal:
-          playersList[counter].playerCards.append(card)
-          if counter < (noOfPlayers-1):
-            counter += 1 
-          else:
-            counter = 0
+            playersList[counter].playerCards.append(card)
+            if counter < (noOfPlayers-1):
+                counter += 1 
+            else:
+                counter = 0
+            print(card)
 
         for player in self.playersDict.values():
             print(player.showHand())
