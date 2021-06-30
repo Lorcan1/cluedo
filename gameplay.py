@@ -261,15 +261,6 @@ class Gameplay:
         if len(cards) is not None: #if player has more than one card, display a random one 
             print(random.choice(cards))
 
-                
-                
-
-                   
-
-                    
-
-        
-
         #ask for murderer - move to room
         #ask for weapon - move to room
 
@@ -300,23 +291,3 @@ print(gp.board)
 #PUTTING FILE NAMES IN CAPS WOULD BE EASIER TO READ
 #COMMENT MORE
 #FIX SUBLIME
-
-# 2 1
-# 1 1 
-# 2 1
-# 4 1 
-# 3 1
-
-# 21 
-# 11
-# 21
-# -11
-# -11
-# 41
-
-21
-11
-21
--11
-41
--11
