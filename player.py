@@ -1,11 +1,12 @@
 class Player():
-    def __init__(self,name,x,y):
+    def __init__(self,name,x,y,colour):
         self.name = name 
         self.x = x
         self.y = y
         self.oldPosition = 1
         self.playerCards = []
         self.room = ()
+        self.colour = colour
 
     def updateXY(self,newX,newY):
         self.x = newX
@@ -18,8 +19,8 @@ class Players():
     def __init__(self):
         self.allPlayersDict = {}
     def createPlayers(self):
-        scar = Player('Miss Scarlett',24,7)
-        green = Player('Reverend Green',0,14)
+        scar = Player('Miss Scarlett',24,7,'red')
+        green = Player('Reverend Green',0,14,'green')
         self.addPlayersDict(scar,self.allPlayersDict)
         self.addPlayersDict(green,self.allPlayersDict)
     def addPlayersDict(self,player,dict):
