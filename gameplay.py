@@ -278,6 +278,7 @@ print(gp.board)
 #add secret passageway
 #add room name to player
   #REMOVE ROOM ONCE PLAYER HAS LEFT ROOM
+#make player object same in allPlayersDict and PlayersDict
 
 
 #Rules
