@@ -1,7 +1,8 @@
 import player
 import numpy as np
 import gamesetup
-import random,rooms,cards
+import random,rooms,cards,board
+# import gui
 
 class Gameplay:
     def __init__(self):
@@ -12,7 +13,7 @@ class Gameplay:
      # Sqaures that are marked 3 are squares inside rooms - they cannot be accessed directly
      # Sqaures that are marked 4 are room squares that are adjacent to room entrances
      # All negative squares are occupied by another user (e.g. -1 is an occupied pathway square
-     
+        # gui2 = gui.Gui()
         self.board = np.array([   
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [3, 3, 3, 3, 3, 3, 0, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 0],
@@ -63,6 +64,7 @@ class Gameplay:
                 print('Please press 1')
         startIndex = rollList.index(max(rollList))
         self.playerMover(startIndex,playerDict)
+        
     def playerMover(self,turn,playerDict):
         running = True
         playerDictValueList = list(playerDict.values())
@@ -94,6 +96,7 @@ class Gameplay:
                     turn = 0
                 else: 
                     turn =+ 1 
+               # gui.gui.placePlayersOnBoard()
             elif rollCheck == '2':
                 accusation = self.makeSuggestion(playerDictValueList[turn],1)
                 counter = 0
@@ -111,21 +114,25 @@ class Gameplay:
         newX = selectedPlayer.x +1
         newY = selectedPlayer.y
         self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+        player.p.movePlayerOnBoard(selectedPlayer)
     def movePieceDown(self,selectedPlayer):
         newX = selectedPlayer.x -1
         newY = selectedPlayer.y
         self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+        player.p.movePlayerOnBoard(selectedPlayer)
     def movePieceLeft(self,selectedPlayer):
         newX = selectedPlayer.x
         newY = selectedPlayer.y -1
         self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+        player.p.movePlayerOnBoard(selectedPlayer)
     def movePieceRight(self,selectedPlayer):
         newX = selectedPlayer.x
         newY = selectedPlayer.y +1
         self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+        player.p.movePlayerOnBoard(selectedPlayer)
     def checkValidPosition(self,x,y,newX,newY,selectedPlayer):
         self.movesMade.append((x,y))
-        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or self.board[newX][newY] == 3 or self.board[newX][newY] == 4 or ((newX,newY) in self.movesMade)):
+        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or self.board[newX][newY] in [-1,0,3,4] or ((newX,newY) in self.movesMade)):
             print('invalid move')
             self.turnCount += 1
         else:
@@ -269,16 +276,20 @@ class Gameplay:
     # 	print(x,y)
 
 gp = Gameplay()
-gp.startPosition(player.p.allPlayersDict)
-gp.rollDice(gamesetup.gs.playersDict)
-print(gp.board)
+# gp.startPosition(player.p.allPlayersDict)
+# print('hiiiiiirngoerngoeni')
+# gp.rollDice(gamesetup.gs.playersDict)
+# print(gp.board)
+
 
 #TODO
 #move player(token?) to centre of room
 #add secret passageway
 #add room name to player
   #REMOVE ROOM ONCE PLAYER HAS LEFT ROOM
-#make player object same in allPlayersDict and PlayersDict
+#make player object same in allPlayersDict and PlayersDict - easier fix to this
+#players coordinates are updated even when move is invalid
+#line 122 needs to be removed in gameplay, need a board class 
 
 
 #Rules

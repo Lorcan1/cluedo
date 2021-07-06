@@ -1,5 +1,5 @@
 import numpy as np
-from player import Player
+import player
 import cards
 import random
 
@@ -19,12 +19,12 @@ class GameState():
                     print(i, playerNamesDict[i])
                 playerSelection = input('Choose Player:\n')
                 if playerSelection == '1' and playerSelection in playerNamesDict.keys():
-                  scar = Player('Miss Scarlett',18,7)
+                  scar = player.p.allPlayersDict['Miss Scarlett']
                   self.playersDict['Miss Scarlett'] = scar
                   playerNum += 1 
                   del playerNamesDict['1']
                 elif  playerSelection == '4' and playerSelection in playerNamesDict.keys():
-                  green = Player('Reverend Green',0,14)
+                  green = player.p.allPlayersDict['Reverend Green']
                   self.playersDict['Reverend Green'] = green
                   playerNum += 1
                   del playerNamesDict['4']
