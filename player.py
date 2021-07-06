@@ -1,3 +1,5 @@
+import board
+
 class Player():
     def __init__(self,name,x,y,colour):
         self.name = name 
@@ -7,6 +9,7 @@ class Player():
         self.playerCards = []
         self.room = ()
         self.colour = colour
+        self.token = None
 
     def updateXY(self,newX,newY):
         self.x = newX
@@ -25,6 +28,17 @@ class Players():
         self.addPlayersDict(green,self.allPlayersDict)
     def addPlayersDict(self,player,dict):
         dict[player.name] = player
+    def placePlayersOnBoard(self):
+        for p in self.allPlayersDict.values():
+            print(p.x ,p.y)
+            h1,h2 = 44 + 22.92*(p.x),44 + 22.92*(p.x +1)
+            w1,w2 = 63 + 22.91*(p.y),63 + 22.91*(p.y +1)
+            p.token = board.b.board.create_rectangle(w1, h1, w2, h2, fill=p.colour)
+    def movePlayerOnBoard(self,selectedPlayer):
+        board.b.board.delete(selectedPlayer.token)
+        h1,h2 = 44 + 22.92*(selectedPlayer.x),44 + 22.92*(selectedPlayer.x +1)
+        w1,w2 = 63 + 22.91*(selectedPlayer.y),63 + 22.91*(selectedPlayer.y +1)
+        selectedPlayer.token = board.b.board.create_rectangle(w1, h1, w2, h2, fill=selectedPlayer.colour)
 
 p = Players()
 p.createPlayers()
