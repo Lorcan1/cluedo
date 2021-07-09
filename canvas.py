@@ -1,15 +1,15 @@
 from tkinter import *
 import tkinter as tk
 from PIL import ImageTk,Image
-height = 700
-width = 700
+h = 700
+w = 700
 # root= Tk()
 counter = 20
 widgetsList = []
-class Canvas:
+class GuiCanvas:
     def __init__(self):
 	    self.root = Tk()
-	    self.board =  Canvas(self.root,width=width,height=height) 
+	    self.canvas =  Canvas(self.root,width=w,height=h) 
 	    self.widget = None
 
     def createWelcomeMessage(self):
@@ -33,9 +33,4 @@ class Canvas:
         global counter
         counter = 0
 
-
-
-
-
-
-b = Board()
+c = GuiCanvas()

@@ -1,4 +1,4 @@
-import board
+import canvas
 
 class Player():
     def __init__(self,name,x,y,colour):
@@ -33,12 +33,12 @@ class Players():
             print(p.x ,p.y)
             h1,h2 = 44 + 22.92*(p.x),44 + 22.92*(p.x +1)
             w1,w2 = 63 + 22.91*(p.y),63 + 22.91*(p.y +1)
-            p.token = board.b.board.create_rectangle(w1, h1, w2, h2, fill=p.colour)
+            p.token = canvas.c.canvas.create_rectangle(w1, h1, w2, h2, fill=p.colour)
     def movePlayerOnBoard(self,selectedPlayer):
-        board.b.board.delete(selectedPlayer.token)
+        canvas.c.canvas.delete(selectedPlayer.token)
         h1,h2 = 44 + 22.92*(selectedPlayer.x),44 + 22.92*(selectedPlayer.x +1)
         w1,w2 = 63 + 22.91*(selectedPlayer.y),63 + 22.91*(selectedPlayer.y +1)
-        selectedPlayer.token = board.b.board.create_rectangle(w1, h1, w2, h2, fill=selectedPlayer.colour)
+        selectedPlayer.token = canvas.c.canvas.create_rectangle(w1, h1, w2, h2, fill=selectedPlayer.colour)
 
 p = Players()
 p.createPlayers()

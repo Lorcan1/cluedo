@@ -1,8 +1,7 @@
 import player
 import numpy as np
 import gamesetup
-import random,rooms,cards,board
-# import gui
+import random,rooms,cards,canvas
 
 class Gameplay:
     def __init__(self):
@@ -55,6 +54,7 @@ class Gameplay:
             if rollCheck == '1':
                 roll = random.randint(1, 6)
                 print(f'{player.name} rolled a:',roll)
+                canvas.c.updateWidget((f'{player.name} rolled a:',roll))
                 if roll in rollList:
                     self.rollDice(playerDict)
                 else:
@@ -70,6 +70,7 @@ class Gameplay:
         playerDictValueList = list(playerDict.values())
         playerDictKeysList = list(playerDict.keys())
         print(f"{playerDictKeysList[turn]} rolled higher and therfore {playerDictKeysList[turn]} goes first")
+        canvas.c.updateWidget((f"{playerDictKeysList[turn]} rolled higher and therfore {playerDictKeysList[turn]} goes first"))
         while running == True:
             print(f"{playerDictKeysList[turn]}'s turn")
             rollCheck = input(f'{playerDictKeysList[turn]} press 1 to roll the dice and move!: \nPress 2 to make an Accusation!: \n')
@@ -113,12 +114,14 @@ class Gameplay:
     def movePieceUp(self,selectedPlayer):
         newX = selectedPlayer.x +1
         newY = selectedPlayer.y
-        self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+        if self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer) != False:
+            canvas.c.updateWidget((f'{selectedPlayer.name} moved up to:',selectedPlayer.x,selectedPlayer.y))
         player.p.movePlayerOnBoard(selectedPlayer)
     def movePieceDown(self,selectedPlayer):
         newX = selectedPlayer.x -1
         newY = selectedPlayer.y
-        self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer)
+        if self.checkValidPosition(selectedPlayer.x,selectedPlayer.y,newX,newY,selectedPlayer) != False:
+            canvas.c.updateWidget((f'{selectedPlayer.name} moved down to:',selectedPlayer.x,selectedPlayer.y))
         player.p.movePlayerOnBoard(selectedPlayer)
     def movePieceLeft(self,selectedPlayer):
         newX = selectedPlayer.x
@@ -135,6 +138,7 @@ class Gameplay:
         if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or self.board[newX][newY] in [-1,0,3,4] or ((newX,newY) in self.movesMade)):
             print('invalid move')
             self.turnCount += 1
+            return False
         else:
             temp = self.board[newX][newY] 
             self.board[newX][newY] = -1

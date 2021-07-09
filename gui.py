@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import ImageTk,Image
 import player
-import gameplay,gamesetup,board
+import gameplay,gamesetup,canvas
 import time
 
 height = 700
@@ -13,22 +13,27 @@ class Gui:
     def __init__(self):
         self.createBoard()
     def createBoard(self):
-        board.b.board.pack(anchor = 'nw')
+        canvas.c.canvas.pack(anchor = 'nw')
         logoImg = Image.open("cluedo.png")
         resize_image = logoImg.resize((500,500))
         logoImg = ImageTk.PhotoImage(resize_image)  
-        board.b.board.create_image(width/2, height/2, image=logoImg) 
-        board.b.root.after(2000, self.change_img)
+        canvas.c.canvas.create_image(width/2, height/2, image=logoImg) 
+        canvas.c.root.after(2000, self.changeImg)
+        #self.createWidget()
+        canvas.c.root.after(2000, canvas.c.createWelcomeMessage)
         gameplay.gp.startPosition(player.p.allPlayersDict)
         gameplay.gp.rollDice(gamesetup.gs.playersDict)
         print(gameplay.gp.board)
-        board.b.root.mainloop()
+        canvas.c.root.mainloop()
 
 
-    def change_img(self):
-        board.b.board.delete("all")
-        board.b.board.create_image(20,20, anchor=NW, image=boardImg)
+    def changeImg(self):
+        canvas.c.canvas.delete("all")
+        canvas.c.canvas.create_image(20,20, anchor=NW, image=boardImg)
         player.p.placePlayersOnBoard()
+
+    # def createWidget(self):
+    # 	Label(canvas.c.root, text="Hello WORLD").place(x=660, y=20)
 
 gui = Gui()
 # gui.createBoard()
