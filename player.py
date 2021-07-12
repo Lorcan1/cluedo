@@ -8,6 +8,7 @@ class Player():
         self.oldPosition = 1
         self.playerCards = []
         self.room = ()
+        self.inRoom = False
         self.colour = colour
         self.token = None
 

@@ -135,6 +135,8 @@ class Gameplay:
         player.p.movePlayerOnBoard(selectedPlayer)
     def checkValidPosition(self,x,y,newX,newY,selectedPlayer):
         self.movesMade.append((x,y))
+        if selectedPlayer.inRoom == True:
+            newX,newY = self.leaveRoom(selectedPlayer)
         if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or self.board[newX][newY] in [-1,0,3,4] or ((newX,newY) in self.movesMade)):
             print('invalid move')
             self.turnCount += 1
@@ -149,14 +151,18 @@ class Gameplay:
             if temp == 2 and self.turnCount > 1: # ask player whether they wish to enter room,gives them an extra turn however # and diceroll has at least one left
                 self.enterRoom(newX,newY,selectedPlayer)
         print(self.board)
-    def enterRoom(self,newX,newY,selectedPlayer):
-        roomBool = input('Do you wish to enter room: \n')
+    def enterRoom(self,newX,newY,selectedPlayer,isSuspect=False):
+        if isSuspect is False:
+            roomBool = input('Do you wish to enter room: \n')
+        else:
+            roomBool = 'Yes'
         if roomBool in ['Yes','Y' ,'yes','y']:
+            selectedPlayer.inRoom = True
             for room in list(rooms.r.rooms.values()):
                 if (newX,newY) in room.entrances:
                     selectedPlayer.room = room.name
                     self.movePlayerIntoRoom(selectedPlayer)
-                    if self.turnCount > 0: #needs to be player.turncount
+                    if self.turnCount > 0 and isSuspect is False: #needs to be player.turncount
                         accBool = input('Do you wish to make a suggestion: \n')
                         if accBool in ['Yes','Y' ,'yes','y']:
                             self.makeSuggestion(selectedPlayer)
@@ -171,8 +177,15 @@ class Gameplay:
                 selectedPlayer.oldPosition = temp
                 selectedPlayer.x = selectedPlayer.x + d[0]
                 selectedPlayer.y = selectedPlayer.y + d[1]
+                player.p.movePlayerOnBoard(selectedPlayer)
                 self.centrePlayerInRoom(selectedPlayer)
                 print(self.board)
+
+    def leaveRoom(self,selectedPlayer):
+        newX,newY = rooms.r.rooms[selectedPlayer.room].entrances[0][0], rooms.r.rooms[selectedPlayer.room].entrances[0][1]
+        selectedPlayer.inRoom = False
+        selectedPlayer.room = ()
+        return newX,newY
 
     def makeSuggestion(self,selectedPlayer,isSuggestion=0):
         charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
@@ -192,6 +205,8 @@ class Gameplay:
 #        self.moveSuspect(selectedPlayer,suggestedMurdererCharacter)
         suggestedMurderer = charSelectDict[int(suggestedMurderer)]
         suggestedWeapon = weapSelectDict[int(suggestedWeapon)]
+        suggestedMurdererCharacter = player.p.allPlayersDict[suggestedMurderer] #needs the player object to be moved as opposed to a string name
+        self.moveSuspect(selectedPlayer,suggestedMurdererCharacter)
         if isSuggestion == 1:
             roomSelectDict = {1:'Kitchen',2:'Ballroom',3:'Conservatory',
             4:'Dining Room',5:'Billiard Room',6:'Library',7:'Lounge',8:'Hall',9:'Study'}
@@ -217,7 +232,8 @@ class Gameplay:
             self.board[suggestedMurderer.x][suggestedMurderer.y] = -1 
          #   self.checkValidPosition(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
           #  self.centrePlayerInRoom(suggestedMurderer)
-            self.enterRoom(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
+            suggestedMurderer.oldPosition = 2
+            self.enterRoom(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer,True)
     def centrePlayerInRoom(self,selectedPlayer):
         directions = ((0,1),(1,0),(-1,0),(0,-1))
         playerRow = selectedPlayer.x
@@ -225,9 +241,6 @@ class Gameplay:
         selectedPlayer.oldPosition = 4 #this needs to be changed
 
         for d in directions:
-            print('xxxxxxxxxx')
-            print(d)
-            print('xxxxxxxxxx')
             playerRow = selectedPlayer.x
             playerCol = selectedPlayer.y
             playerRow = playerRow + (d[0])
@@ -244,8 +257,10 @@ class Gameplay:
                     temp = self.board[playerRow][playerCol] 
                     self.board[playerRow][playerCol] = -1
                     self.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
+                    selectedPlayer.x, selectedPlayer.y = playerRow,playerCol
                     print('return')
                     selectedPlayer.oldPosition = temp
+                    player.p.movePlayerOnBoard(selectedPlayer)
                     return
                 else:
                     playerRow = playerRow + (d[0]*i)
@@ -269,7 +284,7 @@ class Gameplay:
                         if card == s: 
                             cards.append(card)
                             returnedCard = True
-        if len(cards) is not None: #if player has more than one card, display a random one 
+        if len(cards) is not 0: #if player has more than one card, display a random one 
             print(random.choice(cards))
 
         #ask for murderer - move to room
