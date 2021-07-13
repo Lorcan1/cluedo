@@ -1,6 +1,8 @@
 import numpy as np
 import player
 import cards
+from weapons import weaponsDict 
+import rooms
 import random
 
 class GameState():
@@ -50,7 +52,15 @@ class GameState():
         for player in self.playersDict.values():
             print(player.showHand())
 
+    def assignWeaponsToRooms(self,weaponsDict):
+        roomsList = list(rooms.r.rooms.values())
+        random.shuffle(roomsList)
+        counter = 0
+        for weapon in weaponsDict.values():
+          weapon.room = roomsList[counter].name
+          counter += 1
 
 gs = GameState()
 gs.enterNumPlayers()
 gs.dealCards()
+gs.assignWeaponsToRooms(weaponsDict)

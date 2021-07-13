@@ -22,6 +22,7 @@ class Gui:
         #self.createWidget()
         canvas.c.root.after(2000, canvas.c.createWelcomeMessage)
         gameplay.gp.startPosition(player.p.allPlayersDict)
+       # gameplay.gp.centreWeaponInRoom()
         gameplay.gp.rollDice(gamesetup.gs.playersDict)
         print(gameplay.gp.board)
         canvas.c.root.mainloop()

@@ -2,6 +2,7 @@ import player
 import numpy as np
 import gamesetup
 import random,rooms,cards,canvas
+from weapons import weaponsDict
 
 class Gameplay:
     def __init__(self):
@@ -272,6 +273,27 @@ class Gameplay:
                      #kind of working for moving player, but its starting on the 2 
                     #instead of the 4 and changing it to 1 (because olPosition is one
                     #but its leaving its orginal position ok so its the second old position)
+    def centreWeaponInRoom(self):
+        for weapon in weaponsDict.values():
+            sizeList = []
+            longestSide = 0
+            roomEntranceRow, roomEntranceCol = rooms.r.rooms[weapon.room].entrances[0][0],rooms.r.rooms[weapon.room].entrances[0][1]
+            directions = ((0,1),(1,0),(-1,0),(0,-1))
+            for d in directions:
+                selectedRow = roomEntranceRow + (d[0])
+                selectedCol = roomEntranceCol + (d[1])
+                for i in range(1,5):
+                    if self.board[selectedRow][selectedCol] == 3:
+                        longestSide += 1
+                    else:
+                        break
+                sizeList.append(longestSide)
+                longestSide = 0
+                print('gggggggggggggggggggggggggggggggggggggggggg')
+                print(weapon.room)
+                print(sizeList)
+                print('gggggggggggggggggggggggggggggggggggggggggg')
+
 
    # This function checks the players suggestion against other players cards
     def checkCards(self,selectedPlayer,suggestion): #NEEDS TO BE TESTED FOR THREE PLAYERS IE DOES IT STOP IF PLAYER HAS A CARD
@@ -295,6 +317,11 @@ class Gameplay:
     # 	print(x,y)
 
 gp = Gameplay()
+
+
+
+
+
 # gp.startPosition(player.p.allPlayersDict)
 # print('hiiiiiirngoerngoeni')
 # gp.rollDice(gamesetup.gs.playersDict)

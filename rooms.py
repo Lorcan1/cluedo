@@ -68,10 +68,6 @@ class Rooms():
                      loungeRoom,hallRoom,studyRoom]:
             self.rooms[room.name] = room
  
-
-
-
-
 r = Rooms()
 r.createRoom()
 print(r.rooms)
