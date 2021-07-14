@@ -7,7 +7,6 @@ class Kitchen(Room):
         self.name = 'Kitchen'
         self.entrances = [(7,4)]
 
-
 class Ballroom(Room):
     def __init__(self):
         self.name = 'Ballroom'

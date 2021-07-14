@@ -14,40 +14,12 @@ class Gameplay:
      # Sqaures that are marked 4 are room squares that are adjacent to room entrances
      # All negative squares are occupied by another user (e.g. -1 is an occupied pathway square
         # gui2 = gui.Gui()
-        self.board = np.array([   
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [3, 3, 3, 3, 3, 3, 0, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 4, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 1, 2, 4, 3, 3, 3, 3, 3, 3, 4, 2, 1, 2, 3, 3, 3, 3, 0, 0],
-        [3, 3, 3, 3, 4, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-        [1, 1, 1, 1, 2, 1, 1, 1, 3, 4, 3, 3, 3, 3, 4, 3, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-        [0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 1, 1, 1, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 1, 1, 1, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 3, 4, 2, 1, 3, 3, 3, 3, 3, 1, 1, 1, 3, 3, 3, 3, 4, 3, 0],
-        [3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 2, 1, 2, 0, 0],
-        [3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 1, 1, 1, 3, 3, 4, 3, 3, 0, 0],
-        [3, 3, 3, 3, 3, 3, 4, 3, 1, 1, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 0],
-        [0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 3, 3, 4, 3, 3, 1, 2, 4, 3, 3, 3, 3, 3, 3, 0],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 0],
-        [0, 1, 1, 1, 1, 1, 2, 1, 1, 3, 3, 4, 4, 3, 3, 1, 1, 1, 3, 3, 3, 3, 3, 0, 0],
-        [3, 3, 3, 3, 3, 3, 4, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-        [3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 4, 2, 1, 2, 1, 1, 1, 1, 1, 0, 0],
-        [3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 4, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 3, 0],
-        [3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 3, 3, 3, 3, 3, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ])
         self.turnCount = 0
         self.movesMade = []
 
     def startPosition(self,playerDict): #this should probably be in gamesetup
         for player in playerDict.values():
-            self.board[player.x][player.y] = -1
+            gamesetup.gs.board[player.x][player.y] = -1
     def rollDice(self,playerDict):# decide who goes first
         rollList = []
         for player in playerDict.values():
@@ -138,20 +110,20 @@ class Gameplay:
         self.movesMade.append((x,y))
         if selectedPlayer.inRoom == True:
             newX,newY = self.leaveRoom(selectedPlayer)
-        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or self.board[newX][newY] in [-1,0,3,4] or ((newX,newY) in self.movesMade)):
+        if (((25< newX) or (newX < 0) or (25 < newY) or (newY < 0)) or gamesetup.gs.board[newX][newY] in [-1,0,3,4] or ((newX,newY) in self.movesMade)):
             print('invalid move')
             self.turnCount += 1
             return False
         else:
-            temp = self.board[newX][newY] 
-            self.board[newX][newY] = -1
-            self.board[x][y] = selectedPlayer.oldPosition
+            temp = gamesetup.gs.board[newX][newY] 
+            gamesetup.gs.board[newX][newY] = -1
+            gamesetup.gs.board[x][y] = selectedPlayer.oldPosition
             selectedPlayer.oldPosition = temp   
             print('valid move')
             selectedPlayer.updateXY(newX,newY)
             if temp == 2 and self.turnCount > 1: # ask player whether they wish to enter room,gives them an extra turn however # and diceroll has at least one left
                 self.enterRoom(newX,newY,selectedPlayer)
-        print(self.board)
+        print(gamesetup.gs.board)
     def enterRoom(self,newX,newY,selectedPlayer,isSuspect=False):
         if isSuspect is False:
             roomBool = input('Do you wish to enter room: \n')
@@ -171,16 +143,16 @@ class Gameplay:
     def movePlayerIntoRoom(self,selectedPlayer):
         directions = [(0,1),(1,0),(-1,0),(0,-1)]
         for d in directions:
-            if self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 4:
-                temp = self.board[selectedPlayer.x][selectedPlayer.y] 
-                self.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] = -1
-                self.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
+            if gamesetup.gs.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] == 4:
+                temp = gamesetup.gs.board[selectedPlayer.x][selectedPlayer.y] 
+                gamesetup.gs.board[selectedPlayer.x + d[0]][selectedPlayer.y + d[1]] = -1
+                gamesetup.gs.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
                 selectedPlayer.oldPosition = temp
                 selectedPlayer.x = selectedPlayer.x + d[0]
                 selectedPlayer.y = selectedPlayer.y + d[1]
                 player.p.movePlayerOnBoard(selectedPlayer)
                 self.centrePlayerInRoom(selectedPlayer)
-                print(self.board)
+                print(gamesetup.gs.board)
 
     def leaveRoom(self,selectedPlayer):
         newX,newY = rooms.r.rooms[selectedPlayer.room].entrances[0][0], rooms.r.rooms[selectedPlayer.room].entrances[0][1]
@@ -228,9 +200,9 @@ class Gameplay:
             pass
         else:
             suggestedMurderer.room = selectedPlayer.room  #room name
-            self.board[suggestedMurderer.x][suggestedMurderer.y] = suggestedMurderer.oldPosition
+            gamesetup.gs.board[suggestedMurderer.x][suggestedMurderer.y] = suggestedMurderer.oldPosition
             suggestedMurderer.x, suggestedMurderer.y =  rooms.r.rooms[suggestedMurderer.room].entrances[0][0],rooms.r.rooms[suggestedMurderer.room].entrances[0][1]
-            self.board[suggestedMurderer.x][suggestedMurderer.y] = -1 
+            gamesetup.gs.board[suggestedMurderer.x][suggestedMurderer.y] = -1 
          #   self.checkValidPosition(suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer.x,suggestedMurderer.y,suggestedMurderer)
           #  self.centrePlayerInRoom(suggestedMurderer)
             suggestedMurderer.oldPosition = 2
@@ -247,17 +219,17 @@ class Gameplay:
             playerRow = playerRow + (d[0])
             playerCol = playerCol + (d[1])
             for i in range(1,5):
-                if self.board[playerRow][playerCol] == 1:
+                if gamesetup.gs.board[playerRow][playerCol] == 1:
                     print(playerRow,playerCol)
                     print('break')
                     break
-                elif self.board[playerRow][playerCol] == 3:
+                elif gamesetup.gs.board[playerRow][playerCol] == 3:
                     print('yyyyyyy')
                     print(playerRow,playerCol)
                     print('yyyyyyy')
-                    temp = self.board[playerRow][playerCol] 
-                    self.board[playerRow][playerCol] = -1
-                    self.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
+                    temp = gamesetup.gs.board[playerRow][playerCol] 
+                    gamesetup.gs.board[playerRow][playerCol] = -1
+                    gamesetup.gs.board[selectedPlayer.x][selectedPlayer.y] = selectedPlayer.oldPosition
                     selectedPlayer.x, selectedPlayer.y = playerRow,playerCol
                     print('return')
                     selectedPlayer.oldPosition = temp
@@ -269,31 +241,12 @@ class Gameplay:
                     print('zzzzzzzzzzzz')
                     print(d,i)
                     print('zzzzzzzzzzzz')
-                    print(self.board[playerRow][playerCol])
+                    print(gamesetup.gs.board[playerRow][playerCol])
                      #kind of working for moving player, but its starting on the 2 
                     #instead of the 4 and changing it to 1 (because olPosition is one
                     #but its leaving its orginal position ok so its the second old position)
-    def centreWeaponInRoom(self):
-        for weapon in weaponsDict.values():
-            sizeList = []
-            longestSide = 0
-            roomEntranceRow, roomEntranceCol = rooms.r.rooms[weapon.room].entrances[0][0],rooms.r.rooms[weapon.room].entrances[0][1]
-            directions = ((0,1),(1,0),(-1,0),(0,-1))
-            for d in directions:
-                selectedRow = roomEntranceRow + (d[0])
-                selectedCol = roomEntranceCol + (d[1])
-                for i in range(1,5):
-                    if self.board[selectedRow][selectedCol] == 3:
-                        longestSide += 1
-                    else:
-                        break
-                sizeList.append(longestSide)
-                longestSide = 0
-                print('gggggggggggggggggggggggggggggggggggggggggg')
-                print(weapon.room)
-                print(sizeList)
-                print('gggggggggggggggggggggggggggggggggggggggggg')
 
+     
 
    # This function checks the players suggestion against other players cards
     def checkCards(self,selectedPlayer,suggestion): #NEEDS TO BE TESTED FOR THREE PLAYERS IE DOES IT STOP IF PLAYER HAS A CARD
