@@ -32,7 +32,8 @@ class Weapons():
 
     def centreWeaponInRoom(self):
         for weapon in weaponsDict.values():
-            sizeList = []
+            sizeDict = {}
+           # sizeList = []
             roomEntranceRow, roomEntranceCol = self.getInsideRoomCoords(weapon)
             print(weapon.room, roomEntranceRow,roomEntranceCol)
             directions = ((0,1),(1,0),(-1,0),(0,-1))
@@ -48,12 +49,14 @@ class Weapons():
                         selectedCol = roomEntranceCol + (d[1]*i)
                     else:
                         break
-                sizeList.append(longestSide)
+                sizeDict[longestSide] = (d,roomEntranceRow,roomEntranceCol)
+                #sizeList.append(longestSide)
                 longestSide = 0
                 print('gggggggggggggggggggggggggggggggggggggggggg')
                 print(weapon.room)
-                print(sizeList)
+                print(sizeDict)
                 print('gggggggggggggggggggggggggggggggggggggggggg')
+            self.getRoomCentre(sizeDict)
 
     def getInsideRoomCoords(self,weapon):
         roomEntranceRow, roomEntranceCol = rooms.r.rooms[weapon.room].entrances[0][0],rooms.r.rooms[weapon.room].entrances[0][1]
@@ -65,6 +68,38 @@ class Weapons():
             selectedCol = roomEntranceCol + (d[1])
             if gamesetup.gs.board[selectedRow][selectedCol] == 4:
                 return selectedRow,selectedCol
+
+    def getRoomCentre(self,sizeDict):
+        sizeList = list(sizeDict.keys())
+        sizeList.sort(reverse = True)
+        print(sizeList)
+        longestSides = (sizeList[0],sizeList[1])
+        print(longestSides)
+
+        longestSideTuple = sizeDict[longestSides[0]],sizeDict[longestSides[1]]
+        print(longestSideTuple)
+        direction1, roomEntranceRow, roomEntranceCol = longestSideTuple[0]
+        direction2 = longestSideTuple[1][0]
+        print(direction1,roomEntranceRow,roomEntranceCol,direction2)
+
+        if direction1 == (1,0) or direction1 == (-1,0): #row
+            centreRow = roomEntranceRow + (longestSides[0]//2)*direction1[0]                 
+            centreCol = roomEntranceCol + (longestSides[1]//2)*direction2[1]
+        else:
+            centreCol = roomEntranceCol + (longestSides[0]//2)*direction1[1]                 
+            centreRow = roomEntranceRow + (longestSides[1]//2)*direction2[0]
+
+        print(centreRow,centreCol)
+        self.placeWeaponsOnBoard(centreRow,centreCol)
+
+    def placeWeaponsOnBoard(self):
+        #see place players in players 
+
+
+
+
+
+
 
 
 w = Weapons()
