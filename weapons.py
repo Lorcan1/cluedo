@@ -1,4 +1,5 @@
-import rooms,gamesetup,random
+import rooms,gamesetup,random,canvas
+from PIL import ImageTk,Image
 weaponsDict = {}
 
 
@@ -20,7 +21,6 @@ class Weapons():
         wrench = Weapon('Wrench')
         candlestick = Weapon('Candlestick')
         rope = Weapon('Rope')
-
 
     def assignWeaponsToRooms(self):
         roomsList = list(rooms.r.rooms.values())
@@ -56,7 +56,8 @@ class Weapons():
                 print(weapon.room)
                 print(sizeDict)
                 print('gggggggggggggggggggggggggggggggggggggggggg')
-            self.getRoomCentre(sizeDict)
+            centreRow, centreCol = self.getRoomCentre(sizeDict)
+            self.placeWeaponsOnBoard(centreRow,centreCol,weapon)
 
     def getInsideRoomCoords(self,weapon):
         roomEntranceRow, roomEntranceCol = rooms.r.rooms[weapon.room].entrances[0][0],rooms.r.rooms[weapon.room].entrances[0][1]
@@ -90,23 +91,18 @@ class Weapons():
             centreRow = roomEntranceRow + (longestSides[1]//2)*direction2[0]
 
         print(centreRow,centreCol)
-        self.placeWeaponsOnBoard(centreRow,centreCol)
+        return centreRow, centreCol
 
-    def placeWeaponsOnBoard(self):
+    def placeWeaponsOnBoard(self,centreRow,centreCol,weapon):
         #see place players in players 
-
-
-
-
-
-
-
+        #make algorithm that finds coordinate location based on centre
+        #shrink to size and place on canvas
+        #print('console log') reaching here, probably to do with the iamge being defined in a function
+        weaponImg = ImageTk.PhotoImage(Image.open(weapon.name +'.png'))
+        h1,h2 = 44 + 22.92*(centreRow),44 + 22.92*(centreCol +1)
+        w1,w2 = 63 + 22.91*(centreCol),63 + 22.91*(centreCol +1)
+        canvas.c.canvas.create_image(20,20,image=weaponImg)
 
 w = Weapons()
 w.createWeapons()
 w.assignWeaponsToRooms()
-
-#get all the weapons in a list 
-#shuffle the rooms and assign them - probably in gamesetup 
-#place in centre of room - probably in gameplay 
-
