@@ -8,6 +8,12 @@ height = 700
 width = 700
 squareSize = height // 25
 boardImg = ImageTk.PhotoImage(Image.open("board.jpg"))
+weaponImgDict = {}
+for weapon in weapons.weaponsDict.values():
+    weaponImg = Image.open(weapon.name +'.png')
+    weaponImgTemp = weaponImg.resize((40,40),Image.ANTIALIAS)
+    weaponImg = ImageTk.PhotoImage(weaponImgTemp)
+    weaponImgDict[weapon.name] = weaponImg
 
 class Gui:
     def __init__(self):
@@ -22,7 +28,6 @@ class Gui:
         #self.createWidget()
         canvas.c.root.after(2000, canvas.c.createWelcomeMessage)
         gameplay.gp.startPosition(player.p.allPlayersDict)
-        weapons.w.centreWeaponInRoom()
         gameplay.gp.rollDice(gamesetup.gs.playersDict)
         print(gameplay.gp.board)
         canvas.c.root.mainloop()
@@ -32,6 +37,8 @@ class Gui:
         canvas.c.canvas.delete("all")
         canvas.c.canvas.create_image(20,20, anchor=NW, image=boardImg)
         player.p.placePlayersOnBoard()
+        weapons.w.centreWeaponInRoom(weaponImgDict)
+
 
     # def createWidget(self):
     # 	Label(canvas.c.root, text="Hello WORLD").place(x=660, y=20)

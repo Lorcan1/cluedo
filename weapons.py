@@ -1,7 +1,7 @@
 import rooms,gamesetup,random,canvas
+from tkinter import *
 from PIL import ImageTk,Image
 weaponsDict = {}
-
 
 class Weapon():
     def __init__(self,name):
@@ -30,7 +30,7 @@ class Weapons():
           weapon.room = roomsList[counter].name
           counter += 1
 
-    def centreWeaponInRoom(self):
+    def centreWeaponInRoom(self,weaponImgDict):
         for weapon in weaponsDict.values():
             sizeDict = {}
            # sizeList = []
@@ -57,7 +57,7 @@ class Weapons():
                 print(sizeDict)
                 print('gggggggggggggggggggggggggggggggggggggggggg')
             centreRow, centreCol = self.getRoomCentre(sizeDict)
-            self.placeWeaponsOnBoard(centreRow,centreCol,weapon)
+            self.placeWeaponsOnBoard(centreRow,centreCol,weapon,weaponImgDict)
 
     def getInsideRoomCoords(self,weapon):
         roomEntranceRow, roomEntranceCol = rooms.r.rooms[weapon.room].entrances[0][0],rooms.r.rooms[weapon.room].entrances[0][1]
@@ -90,18 +90,18 @@ class Weapons():
             centreCol = roomEntranceCol + (longestSides[0]//2)*direction1[1]                 
             centreRow = roomEntranceRow + (longestSides[1]//2)*direction2[0]
 
-        print(centreRow,centreCol)
+        print(centreRow,centreCol)      
         return centreRow, centreCol
 
-    def placeWeaponsOnBoard(self,centreRow,centreCol,weapon):
+    def placeWeaponsOnBoard(self,centreRow,centreCol,weapon,weaponImgDict):
         #see place players in players 
         #make algorithm that finds coordinate location based on centre
         #shrink to size and place on canvas
-        #print('console log') reaching here, probably to do with the iamge being defined in a function
-        weaponImg = ImageTk.PhotoImage(Image.open(weapon.name +'.png'))
+       #check this algorithm
+        weaponImg = weaponImgDict[weapon.name]
         h1,h2 = 44 + 22.92*(centreRow),44 + 22.92*(centreCol +1)
         w1,w2 = 63 + 22.91*(centreCol),63 + 22.91*(centreCol +1)
-        canvas.c.canvas.create_image(20,20,image=weaponImg)
+        canvas.c.canvas.create_image(h1,w1,image=weaponImg, anchor=NW)
 
 w = Weapons()
 w.createWeapons()
