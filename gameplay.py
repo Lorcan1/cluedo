@@ -1,8 +1,8 @@
 import player
 import numpy as np
 import gamesetup
-import random,rooms,cards,canvas
-from weapons import weaponsDict
+import random,rooms,cards,canvas,weapons
+# from weapons import weaponsDict
 
 class Gameplay:
     def __init__(self):
@@ -163,7 +163,7 @@ class Gameplay:
     def makeSuggestion(self,selectedPlayer,isSuggestion=0):
         charSelectDict = {1:'Miss Scarlett',2:'Professor Plum',3:'Mrs Peacock',
         4:'Reverend Green',5:'Colonel Mustard',6:'Dr Orchid'}
-        weapSelectDict = {1:'Candle Stick',2:'Dagger',3:'Lead Pipe',
+        weapSelectDict = {1:'Candlestick',2:'Dagger',3:'Lead Pipe',
         4:'Revolver',5:'Rope',6:'Wrench'}
         print('Who is the murderer?')
         for i in charSelectDict:
@@ -173,13 +173,11 @@ class Gameplay:
         for i in weapSelectDict:
             print(str(i)+'.',weapSelectDict[i])
         suggestedWeapon = input('Choose from the list: \n')
-        
-#        suggestedMurdererCharacter = player.p.allPlayersDict[charSelectDict[int(suggestedMurderer)]] #needs the player object to be moved as opposed to a string name
-#        self.moveSuspect(selectedPlayer,suggestedMurdererCharacter)
         suggestedMurderer = charSelectDict[int(suggestedMurderer)]
         suggestedWeapon = weapSelectDict[int(suggestedWeapon)]
         suggestedMurdererCharacter = player.p.allPlayersDict[suggestedMurderer] #needs the player object to be moved as opposed to a string name
         self.moveSuspect(selectedPlayer,suggestedMurdererCharacter)
+        weapons.w.moveWeapon(suggestedWeapon,selectedPlayer.room)
         if isSuggestion == 1:
             roomSelectDict = {1:'Kitchen',2:'Ballroom',3:'Conservatory',
             4:'Dining Room',5:'Billiard Room',6:'Library',7:'Lounge',8:'Hall',9:'Study'}

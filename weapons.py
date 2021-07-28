@@ -2,6 +2,7 @@ import rooms,gamesetup,random,canvas
 from tkinter import *
 from PIL import ImageTk,Image
 weaponsDict = {}
+weaponImgD = {}
 
 class Weapon():
     def __init__(self,name):
@@ -35,7 +36,6 @@ class Weapons():
             sizeDict = {}
            # sizeList = []
             roomEntranceRow, roomEntranceCol = self.getInsideRoomCoords(weapon)
-            print(weapon.room, roomEntranceRow,roomEntranceCol)
             directions = ((0,1),(1,0),(-1,0),(0,-1))
             for d in directions:
                 longestSide = 0
@@ -44,18 +44,12 @@ class Weapons():
                 for i in range(2,10):
                     if gamesetup.gs.board[selectedRow][selectedCol] == 3:
                         longestSide += 1
-                        print('Longest Side' , longestSide,selectedRow,selectedCol,i)
                         selectedRow = roomEntranceRow + (d[0]*i)
                         selectedCol = roomEntranceCol + (d[1]*i)
                     else:
                         break
                 sizeDict[longestSide] = (d,roomEntranceRow,roomEntranceCol)
-                #sizeList.append(longestSide)
                 longestSide = 0
-                print('gggggggggggggggggggggggggggggggggggggggggg')
-                print(weapon.room)
-                print(sizeDict)
-                print('gggggggggggggggggggggggggggggggggggggggggg')
             centreRow, centreCol = self.getRoomCentre(sizeDict)
             self.placeWeaponsOnBoard(centreRow,centreCol,weapon,weaponImgDict)
 
@@ -94,14 +88,19 @@ class Weapons():
         return centreRow, centreCol
 
     def placeWeaponsOnBoard(self,centreRow,centreCol,weapon,weaponImgDict):
-        #see place players in players 
-        #make algorithm that finds coordinate location based on centre
-        #shrink to size and place on canvas
-       #check this algorithm
+        global weaponImgD
+        weaponImgD = weaponImgDict
         weaponImg = weaponImgDict[weapon.name]
         h1,h2 = 44 + 22.92*(centreRow),44 + 22.92*(centreCol +1)
         w1,w2 = 63 + 22.91*(centreCol),63 + 22.91*(centreCol +1)
-        canvas.c.canvas.create_image(h1,w1,image=weaponImg, anchor=NW)
+        canvas.c.canvas.create_image(w1,h1,image=weaponImg, anchor=NW)
+
+    def moveWeapon(self,weaponName,room):
+        weapon = weaponsDict[weaponName]
+        weapon.room = room
+        weaponImg = weaponImgD[weaponName]
+        canvas.c.canvas.delete(weaponImg)
+        self.centreWeaponInRoom(weaponImgD)
 
 w = Weapons()
 w.createWeapons()

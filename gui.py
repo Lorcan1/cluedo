@@ -25,7 +25,6 @@ class Gui:
         logoImg = ImageTk.PhotoImage(resize_image)  
         canvas.c.canvas.create_image(width/2, height/2, image=logoImg) 
         canvas.c.root.after(2000, self.changeImg)
-        #self.createWidget()
         canvas.c.root.after(2000, canvas.c.createWelcomeMessage)
         gameplay.gp.startPosition(player.p.allPlayersDict)
         gameplay.gp.rollDice(gamesetup.gs.playersDict)
