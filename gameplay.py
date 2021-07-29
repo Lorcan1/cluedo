@@ -2,7 +2,6 @@ import player
 import numpy as np
 import gamesetup
 import random,rooms,cards,canvas,weapons
-# from weapons import weaponsDict
 
 class Gameplay:
     def __init__(self):
@@ -268,10 +267,6 @@ class Gameplay:
     # 	print(x,y)
 
 gp = Gameplay()
-
-
-
-
 
 # gp.startPosition(player.p.allPlayersDict)
 # print('hiiiiiirngoerngoeni')

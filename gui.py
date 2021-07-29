@@ -8,12 +8,8 @@ height = 700
 width = 700
 squareSize = height // 25
 boardImg = ImageTk.PhotoImage(Image.open("board.jpg"))
-weaponImgDict = {}
-for weapon in weapons.weaponsDict.values():
-    weaponImg = Image.open(weapon.name +'.png')
-    weaponImgTemp = weaponImg.resize((40,40),Image.ANTIALIAS)
-    weaponImg = ImageTk.PhotoImage(weaponImgTemp)
-    weaponImgDict[weapon.name] = weaponImg
+weaponImgDict = weapons.weaponImgDict
+
 
 class Gui:
     def __init__(self):
@@ -38,13 +34,7 @@ class Gui:
         player.p.placePlayersOnBoard()
         weapons.w.centreWeaponInRoom(weaponImgDict)
 
-
-    # def createWidget(self):
-    # 	Label(canvas.c.root, text="Hello WORLD").place(x=660, y=20)
-
 gui = Gui()
-# gui.createBoard()
-
 #need to display counters on the board
 #get the location of every player
 #manually input start squares - similar to player location

@@ -3,6 +3,7 @@ from tkinter import *
 from PIL import ImageTk,Image
 weaponsDict = {}
 weaponImgD = {}
+weaponImgDict = {}
 
 class Weapon():
     def __init__(self,name):
@@ -22,6 +23,14 @@ class Weapons():
         wrench = Weapon('Wrench')
         candlestick = Weapon('Candlestick')
         rope = Weapon('Rope')
+        self.createWeaponImages()
+
+    def createWeaponImages(self):
+        for weapon in weaponsDict.values():
+            weaponImg = Image.open(weapon.name +'.png')
+            weaponImgTemp = weaponImg.resize((40,40),Image.ANTIALIAS)
+            weaponImg = ImageTk.PhotoImage(weaponImgTemp)
+            weaponImgDict[weapon.name] = weaponImg
 
     def assignWeaponsToRooms(self):
         roomsList = list(rooms.r.rooms.values())
@@ -89,8 +98,8 @@ class Weapons():
 
     def placeWeaponsOnBoard(self,centreRow,centreCol,weapon,weaponImgDict):
         global weaponImgD
-        weaponImgD = weaponImgDict
         weaponImg = weaponImgDict[weapon.name]
+        weaponImgD[weapon.name] = weaponImg
         h1,h2 = 44 + 22.92*(centreRow),44 + 22.92*(centreCol +1)
         w1,w2 = 63 + 22.91*(centreCol),63 + 22.91*(centreCol +1)
         canvas.c.canvas.create_image(w1,h1,image=weaponImg, anchor=NW)
@@ -98,9 +107,9 @@ class Weapons():
     def moveWeapon(self,weaponName,room):
         weapon = weaponsDict[weaponName]
         weapon.room = room
-        weaponImg = weaponImgD[weaponName]
+        weaponImg = weaponImgDict[weaponName]
         canvas.c.canvas.delete(weaponImg)
-        self.centreWeaponInRoom(weaponImgD)
+        self.centreWeaponInRoom(weaponImgDict)
 
 w = Weapons()
 w.createWeapons()
